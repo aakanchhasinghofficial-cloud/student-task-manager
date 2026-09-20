@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task | Student Task Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <main class="container">
+
+        <header class="app-header">
+            <h1>Edit Task</h1>
+            <p>Update your task details and save your changes.</p>
+        </header>
+
+        <section class="add-task-section">
+            <h2>Task Details</h2>
+
+            <form action="/edit/{{ task['id'] }}" method="POST" class="task-form">
+
+                <input
+                    type="text"
+                    name="title"
+                    value="{{ task['title'] }}"
+                    placeholder="Task title"
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    placeholder="Task description"
+                >{{ task['description'] }}</textarea>
+
+                <select name="priority">
+                    <option value="Low" {% if task['priority'] == 'Low' %}selected{% endif %}>
+                        Low
+                    </option>
+
+                    <option value="Medium" {% if task['priority'] == 'Medium' %}selected{% endif %}>
+                        Medium
+                    </option>
+
+                    <option value="High" {% if task['priority'] == 'High' %}selected{% endif %}>
+                        High
+                    </option>
+                </select>
+
+                <input
+                    type="date"
+                    name="due_date"
+                    value="{{ task['due_date'] }}"
+                >
+
+                <button type="submit">Update Task</button>
+
+            </form>
+
+            <div class="edit-back">
+                <a href="/" class="task-action">Cancel</a>
+            </div>
+
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p>Student Task Manager</p>
+    </footer>
+
+</body>
+</html>

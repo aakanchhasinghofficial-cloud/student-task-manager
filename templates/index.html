@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Student Task Manager | Organize Your Work</title>
+    <meta name="description" content="A simple student task manager for creating, organizing, tracking, and completing tasks.">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <main class="container">
+
+        <!-- Application Header -->
+        <header class="app-header">
+            <h1>Student Task Manager</h1>
+            <p>Organize your tasks, track your progress, and stay productive.</p>
+        </header>
+
+
+        <!-- Add Task Section -->
+        <section class="add-task-section">
+
+            <h2>Add New Task</h2>
+
+            <form action="/add" method="POST" class="task-form">
+
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Task title"
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    placeholder="Task description"
+                ></textarea>
+
+                <select name="priority">
+                    <option value="Low">Low</option>
+                    <option value="Medium" selected>Medium</option>
+                    <option value="High">High</option>
+                </select>
+
+                <input
+                    type="date"
+                    name="due_date"
+                >
+
+                <button type="submit">
+                    Add Task
+                </button>
+
+            </form>
+
+        </section>
+
+
+        <!-- Tasks Section -->
+        <section class="tasks-section">
+
+            <h2>Tasks</h2>
+            <div class="task-summary">
+                <p class="task-count">Total tasks: {{ tasks|length }}</p>
+
+                <p class="task-count">
+                    Completed: {{ tasks|selectattr("completed")|list|length }}
+                </p>
+
+                <p class="task-count">
+                    Pending: {{ tasks|rejectattr("completed")|list|length }}
+                </p>
+            </div>
+            <div class="filter-controls">
+
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search tasks..."
+                >
+
+                <select id="priorityFilter">
+                    <option value="All">All Priorities</option>
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+    
+                <select id="statusFilter">
+                    <option value="All">All Tasks</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+
+            {% if tasks %}
+
+                <div class="task-list">
+
+                    {% for task in tasks %}
+
+                        <article class="task-card {% if task['completed'] %}completed{% endif %}">
+
+                            <div class="task-content">
+
+                                <h3>
+                                    {{ task["title"] }}
+                                    {% if task["completed"] %}
+                                        <span class="status-badge">Completed</span>
+                                    {% endif %}
+                                </h3>
+                                
+
+                                <p>
+                                    <span>Description:</span>
+                                    {{ task["description"] }}
+                                </p>
+
+                                <p>
+                                    <span>Priority:</span>
+                                    <strong class="priority-badge priority-{{ task['priority']|lower }}">
+                                        {{ task["priority"] }}
+                                    </strong>
+                                </p>
+
+                                <p>
+                                    <span>Due Date:</span>
+                                    {{ task["due_date"] }}
+                                </p>
+
+                            </div>
+
+
+                            <!-- Task Actions -->
+                            <div class="task-actions">
+
+                                <a
+                                    href="/complete/{{ task['id'] }}"
+                                    class="task-action"
+                                >
+                                    {% if task["completed"] %}
+                                        Undo
+                                    {% else %}
+                                        Mark Complete
+                                    {% endif %}
+                                </a>
+
+                                <a
+                                    href="/edit/{{ task['id'] }}"
+                                    class="task-action"
+                                >
+                                    Edit
+                                </a>
+
+                                <a
+                                    href="/delete/{{ task['id'] }}"
+                                    class="task-action"
+                                    onclick="return confirm('Are you sure you want to delete this task?');"
+                                >
+                                    Delete
+                                </a>
+
+                            </div>
+
+                        </article>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="empty-state">
+                    <p>No tasks available.</p>
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+       <p>Student Task Manager</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
