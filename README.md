@@ -87,6 +87,20 @@ Mark Complete or Delete
 - Dashboard with task statistics
 - Calendar-based task management
 
+## Screenshots
+
+### Dashboard
+
+![Student Task Manager Dashboard](screenshots/dashboard.png)
+
+### Edit Task
+
+![Edit Task Page](screenshots/Edit.png)
+
+### Task List
+
+![Task List](screenshots/task_manager.png)
+
 ## Learning Outcomes
 
 - Python programming
